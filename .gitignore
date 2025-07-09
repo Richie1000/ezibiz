@@ -1,0 +1,61 @@
+# --------------------------
+# Flutter/Dart/Pub related
+# --------------------------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+/ios/Flutter/.last_build_id
+**/doc/api/
+
+# Symbolication and Obfuscation
+app.*.symbols
+app.*.map.json
+
+# Android build artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# --------------------------
+# Node.js related
+# --------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.pnpm-debug.log
+
+# Optional: for Next.js or general build output
+.next/
+dist/
+out/
+
+# --------------------------
+# Miscellaneous
+# --------------------------
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# --------------------------
+# IDEs and Editors
+# --------------------------
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/  # Uncomment if you want to exclude VS Code config
