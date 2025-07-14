@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:go_router/go_router.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -42,6 +43,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _onGetStarted() {
     // Navigate to main app
+    context.go('/register');
   }
 
   @override
@@ -112,8 +114,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: ElevatedButton(
-                onPressed:
-                _currentPage == _onboardingData.length - 1 ? _onGetStarted : _onNext,
+                onPressed: _currentPage == _onboardingData.length - 1
+                    ? _onGetStarted
+                    : _onNext,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _currentPage == _onboardingData.length - 1
                       ? Colors.deepPurple
@@ -127,9 +130,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 child: Text(
-                    _currentPage == _onboardingData.length - 1 ? 'Get Started' : 'Next'),
+                  _currentPage == _onboardingData.length - 1 ? 'Get Started' : 'Next',
+                ),
               ),
             ),
+
             const SizedBox(height: 30),
           ],
         ),
