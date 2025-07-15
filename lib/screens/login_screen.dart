@@ -52,7 +52,9 @@ class LoginScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go('/dashboard');
+                  },
                   child: const Text("Login", style: TextStyle(fontSize: 16, color: Colors.white),),
                 ),
               ),

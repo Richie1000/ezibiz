@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/register_screen.dart';
+import 'widgets/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +28,10 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/dashboard',
+          builder: (context, state) => const DashboardScreen(),
         ),
       ],
     );
