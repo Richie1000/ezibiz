@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DashboardHome extends StatelessWidget {
   const DashboardHome({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Welcome Kingsley,", style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 12),
+          Text("Welcome Kingsley,", style: theme.textTheme.titleMedium),
+          const SizedBox(height: 5),
           _buildStoreSelector(),
-          const SizedBox(height: 12),
+          const SizedBox(height: 5),
           _buildStoreUrlRow(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 5),
           _buildSearchBar(),
-          const SizedBox(height: 16),
-          _buildStatCards(),
-          const SizedBox(height: 24),
-          _buildSectionHeader("Top Selling Products"),
-          const SizedBox(height: 12),
-          _buildTopSellingProducts(context),
-          const SizedBox(height: 24),
-          _buildSectionHeader("Recent Activity"),
-          const SizedBox(height: 12),
-          _buildRecentActivities(),
+          const SizedBox(height: 5),
+          _buildStatCards(theme),
+          const SizedBox(height: 5),
+          _buildSectionHeader("Top Selling Products", theme),
+          const SizedBox(height: 5),
+          _buildTopSellingProducts(context, theme),
+          const SizedBox(height: 5),
+          _buildSectionHeader("Recent Activity", theme),
+          const SizedBox(height: 5),
+          _buildRecentActivities(theme),
         ],
       ),
     );
@@ -50,15 +52,15 @@ class DashboardHome extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            //padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade300),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text("https://www.ezibiz.com/storename"),
+            child: const Text("https://www.ezibiz.com/storename", style: TextStyle(fontSize: 10),),
           ),
         ),
-        const SizedBox(width: 8),
+        //const SizedBox(width: 3),
         IconButton(onPressed: () {}, icon: const Icon(Icons.copy)),
         OutlinedButton.icon(
           onPressed: () {},
@@ -73,17 +75,30 @@ class DashboardHome extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
         hintText: "T-Shirt",
-        prefixIcon: const Icon(Icons.search),
+        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+        prefixIcon: const Icon(Icons.search, color: Colors.grey),
         suffixIcon: IconButton(
-          icon: const Icon(Icons.filter_list),
+          icon: const Icon(Icons.filter_list, color: Colors.grey),
           onPressed: () {},
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Colors.grey.shade400, width: 1),
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
       ),
     );
   }
 
-  Widget _buildStatCards() {
+  Widget _buildStatCards(ThemeData theme) {
     final stats = [
       {"icon": Icons.shopping_bag_outlined, "label": "New Orders", "value": "5"},
       {"icon": Icons.account_balance_wallet_outlined, "label": "Total Revenue", "value": "₵2,586"},
@@ -95,19 +110,34 @@ class DashboardHome extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: stats.map((stat) {
         return Expanded(
-          child: Card(
-            elevation: 1,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Column(
-                children: [
-                  Icon(stat["icon"] as IconData, color: Colors.deepPurple),
-                  const SizedBox(height: 8),
-                  Text(stat["value"]!.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
-                  Text(stat["label"]!.toString(), textAlign: TextAlign.center, style: const TextStyle(fontSize: 12)),
-                ],
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 6), // Add horizontal spacing between cards
+            child: Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                child: Column(
+                  children: [
+                    Icon(stat["icon"] as IconData, color: Colors.black),
+                    const SizedBox(height: 8),
+                    Text(
+                      stat["value"]!.toString(),
+                      style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold, fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      stat["label"]!.toString(),
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -116,104 +146,167 @@ class DashboardHome extends StatelessWidget {
     );
   }
 
-  Widget _buildTopSellingProducts(BuildContext context) {
-    final products = [
-      {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
-      {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
-      {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
-      {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
-    ];
-
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.32,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final p = products[index];
-          return SizedBox(
-            width: MediaQuery.of(context).size.width * 0.42,
-            child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                    child: Image.asset(
-                      p["image"]!,
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      p["title"]!,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      "Timeless style, durable cotton.",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Text("★★★★★", style: TextStyle(fontSize: 12, color: Colors.amber)),
-                      ),
-                      IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert, size: 16)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-        separatorBuilder: (context, _) => const SizedBox(width: 12),
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(String title, ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
-        TextButton(onPressed: () {}, child: const Text("See all")),
+        Text(
+          title,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        ),
+        TextButton(
+          onPressed: () {},
+          child: Text(
+            "See all",
+            style: theme.textTheme.labelLarge?.copyWith(fontSize: 12),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildRecentActivities() {
+  Widget _buildTopSellingProducts(BuildContext context, ThemeData theme) {
+  final products = [
+    {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
+    {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
+    {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
+    {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
+  ];
+
+  return SizedBox(
+    height: MediaQuery.of(context).size.height * 0.25, // reduced overall card height
+    child: ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        final p = products[index];
+        return SizedBox(
+          width: MediaQuery.of(context).size.width * 0.42,
+          child: GestureDetector(
+            onTap: () => context.go('/product-details'),
+            child: Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Product Image
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                    child: Image.asset(
+                      p["image"]!,
+                      height: MediaQuery.of(context).size.height * 0.11,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
+                  // Product Title
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      p["title"]!,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+
+                  // Product Subtitle
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    child: Text(
+                      "Timeless style, durable cotton.",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(fontSize: 11),
+                    ),
+                  ),
+
+                  const Spacer(), // push rating + button to the bottom
+
+                  // Rating + Menu Button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "★★★★★",
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: Colors.amber,
+                            fontSize: 12,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.more_vert, size: 16),
+                          tooltip: 'More',
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 4), // small bottom spacing
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      separatorBuilder: (context, _) => const SizedBox(width: 12),
+    ),
+  );
+}
+
+
+
+  Widget _buildRecentActivities(ThemeData theme) {
     final activities = [
       {"icon": Icons.shopping_cart, "title": "New Orders", "time": "2m ago", "amount": "₵230.00"},
       {"icon": Icons.attach_money, "title": "Transaction", "time": "8hrs ago", "amount": "₵685.00"},
       {"icon": Icons.money_off_csred, "title": "Withdrawal", "time": "1hr ago", "amount": "₵2,130.00"},
     ];
 
-    return Column(
-      children: activities.map((activity) {
-        return Card(
-          child: ListTile(
-            leading: Icon(activity["icon"] as IconData),
-            title: Text(activity["title"]!.toString()),
-            subtitle: Text(activity["time"]!.toString()),
-            trailing: Text(activity["amount"]!.toString()),
-          ),
-        );
-      }).toList(),
+    return Card(
+      color: Colors.white,
+      child: Column(
+        children: [
+          ...activities.asMap().entries.map((entry) {
+            final i = entry.key;
+            final activity = entry.value;
+            return Column(
+              children: [
+                ListTile(
+                  leading: Icon(activity["icon"] as IconData, color: theme.colorScheme.primary),
+                  title: Text(
+                    activity["title"]!.toString(),
+                    style: theme.textTheme.bodyMedium?.copyWith(fontSize: 13),
+                  ),
+                  subtitle: Text(
+                    activity["time"]!.toString(),
+                    style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
+                  ),
+                  trailing: Text(
+                    activity["amount"]!.toString(),
+                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
+                ),
+                if (i < activities.length - 1)
+                  const Divider(height: 1, thickness: 1, color: Colors.grey),
+              ],
+            );
+          }),
+        ],
+      ),
     );
   }
 }

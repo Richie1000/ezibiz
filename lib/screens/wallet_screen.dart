@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/side_menu.dart';
 
 class WalletScreen extends StatelessWidget {
   const WalletScreen({super.key});
@@ -6,6 +7,28 @@ class WalletScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const SideMenu(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        title: const Text(
+          'Wallet',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.black),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
+      ),
       backgroundColor: const Color(0xFFF6F6F6),
       body: Column(
         children: [

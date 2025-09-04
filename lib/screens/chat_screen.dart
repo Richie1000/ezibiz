@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/side_menu.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -39,6 +40,7 @@ class ChatScreen extends StatelessWidget {
     ];
 
     return Scaffold(
+      drawer: const SideMenu(),
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
@@ -51,9 +53,13 @@ class ChatScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.black),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
         ),
       ),
       body: Column(
@@ -96,9 +102,7 @@ class ChatScreen extends StatelessWidget {
                     chat['time']!,
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
-                  onTap: () {
-                    // Navigate to conversation
-                  },
+                  onTap: () {},
                 );
               },
             ),

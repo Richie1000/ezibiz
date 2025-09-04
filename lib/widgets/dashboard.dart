@@ -4,7 +4,7 @@ import 'package:ezibiz/screens/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import '../screens/dashboard_home_screen.dart';
 import '../screens/products_screen.dart';
-
+import '../widgets/side_menu.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -14,19 +14,23 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
     const DashboardHome(),
     const ProductsScreen(),
-    const OrdersScreen(), 
-    const ChatScreen(), 
-    const WalletScreen(), 
+    const OrdersScreen(),
+    const ChatScreen(),
+    const WalletScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: const SideMenu(),
       appBar: _selectedIndex == 0 ? _buildAppBar() : null,
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -49,17 +53,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
   AppBar _buildAppBar() {
     return AppBar(
       automaticallyImplyLeading: false,
+      backgroundColor: Colors.white,
+      elevation: 0,
       title: Row(
         children: [
-          const Icon(Icons.menu),
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+          ),
           const Spacer(),
           Image.asset('assets/icons/ezibiz_logo.png', height: 32),
           const Spacer(),
           const Icon(Icons.notifications_none),
         ],
       ),
-      backgroundColor: Colors.white,
-      elevation: 0,
     );
   }
 }

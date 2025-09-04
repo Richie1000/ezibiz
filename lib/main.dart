@@ -1,4 +1,8 @@
 import 'package:ezibiz/screens/login_screen.dart';
+import 'package:ezibiz/screens/menu_dashboard_screen.dart';
+import 'package:ezibiz/screens/my_stores_screen.dart';
+import 'package:ezibiz/screens/productsdetailscreen.dart';
+import 'package:ezibiz/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/onboarding_screen.dart';
@@ -33,16 +37,26 @@ class MyApp extends StatelessWidget {
           path: '/dashboard',
           builder: (context, state) => const DashboardScreen(),
         ),
+        GoRoute(
+          path: '/product-detail',
+          builder: (context, state) => const ProductDetailsScreen(),
+        ),
+        GoRoute(
+          path: '/menu-dashboard',
+          builder: (context, state) => const MenuDashboardScreen(),
+        ),
+        GoRoute(
+          path: '/my-stores',
+          builder: (context, state) => const MyStoresScreen(),
+        ),
       ],
     );
 
     return MaterialApp.router(
       routerConfig: _router,
-      title: 'My App',
+      title: 'Ezibiz',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
+      theme: appTheme
     );
   }
 }

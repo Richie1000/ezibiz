@@ -54,8 +54,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -78,13 +79,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Text(
                           page['title']!,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: theme.colorScheme.onBackground,
+                            fontSize: 25,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
                         Expanded(
                           child: Lottie.asset(
                             page['animation']!,
@@ -92,8 +93,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         Text(
                           page['subtitle']!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.justify,
+                          style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15, fontWeight: FontWeight.w500, color: theme.colorScheme.onBackground),
                         ),
                         const SizedBox(height: 20),
                       ],
@@ -106,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(_onboardingData.length, (index) {
-                return _buildDot(isActive: index == _currentPage);
+                return _buildDot(isActive: index == _currentPage, theme: theme);
               }),
             ),
             const SizedBox(height: 20),
@@ -119,11 +120,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     : _onNext,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _currentPage == _onboardingData.length - 1
-                      ? Colors.deepPurple
-                      : Colors.deepPurple.shade50,
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.primary.withOpacity(0.1),
                   foregroundColor: _currentPage == _onboardingData.length - 1
-                      ? Colors.white
-                      : Colors.purple,
+                      ? theme.colorScheme.onPrimary
+                      : theme.colorScheme.primary,
                   minimumSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -131,6 +132,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 child: Text(
                   _currentPage == _onboardingData.length - 1 ? 'Get Started' : 'Next',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: _currentPage == _onboardingData.length - 1
+                        ? theme.colorScheme.onPrimary
+                        : theme.colorScheme.primary,
+                  ),
                 ),
               ),
             ),
@@ -142,13 +148,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildDot({required bool isActive}) {
+  Widget _buildDot({required bool isActive, required ThemeData theme}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 6),
       width: 10,
       height: 10,
       decoration: BoxDecoration(
-        color: isActive ? Colors.deepPurple : Colors.deepPurple.shade200,
+        color: isActive ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.3),
         shape: BoxShape.circle,
       ),
     );

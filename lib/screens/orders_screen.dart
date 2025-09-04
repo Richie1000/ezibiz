@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/side_menu.dart';
 
 class OrdersScreen extends StatelessWidget {
   const OrdersScreen({super.key});
@@ -8,11 +9,20 @@ class OrdersScreen extends StatelessWidget {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
+        drawer: const SideMenu(),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           elevation: 0,
           centerTitle: true,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu, color: Colors.black),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
           title: const Text(
             'Order',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
