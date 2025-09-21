@@ -14,11 +14,11 @@ class DashboardHome extends StatelessWidget {
         children: [
           Text("Welcome Kingsley,", style: theme.textTheme.titleMedium),
           const SizedBox(height: 5),
-          _buildStoreSelector(),
+          _buildStoreSelector(theme),
           const SizedBox(height: 5),
-          _buildStoreUrlRow(),
+          _buildStoreUrlRow(theme),
           const SizedBox(height: 5),
-          _buildSearchBar(),
+          _buildSearchBar(theme),
           const SizedBox(height: 5),
           _buildStatCards(theme),
           const SizedBox(height: 5),
@@ -34,7 +34,7 @@ class DashboardHome extends StatelessWidget {
     );
   }
 
-  Widget _buildStoreSelector() {
+  Widget _buildStoreSelector(ThemeData theme) {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         labelText: "Select your Store",
@@ -47,20 +47,21 @@ class DashboardHome extends StatelessWidget {
     );
   }
 
-  Widget _buildStoreUrlRow() {
+  Widget _buildStoreUrlRow(ThemeData theme) {
     return Row(
       children: [
         Expanded(
           child: Container(
-            //padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
+              border: Border.all(color: theme.dividerColor),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text("https://www.ezibiz.com/storename", style: TextStyle(fontSize: 10),),
+            child: Text(
+              "https://www.ezibiz.com/storename",
+              style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
+            ),
           ),
         ),
-        //const SizedBox(width: 3),
         IconButton(onPressed: () {}, icon: const Icon(Icons.copy)),
         OutlinedButton.icon(
           onPressed: () {},
@@ -71,27 +72,30 @@ class DashboardHome extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(ThemeData theme) {
     return TextField(
       decoration: InputDecoration(
         hintText: "T-Shirt",
-        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
-        prefixIcon: const Icon(Icons.search, color: Colors.grey),
+        hintStyle: theme.textTheme.bodySmall?.copyWith(
+          color: theme.hintColor,
+          fontSize: 14,
+        ),
+        prefixIcon: Icon(Icons.search, color: theme.iconTheme.color),
         suffixIcon: IconButton(
-          icon: const Icon(Icons.filter_list, color: Colors.grey),
+          icon: Icon(Icons.filter_list, color: theme.iconTheme.color),
           onPressed: () {},
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+          borderSide: BorderSide(color: theme.dividerColor, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+          borderSide: BorderSide(color: theme.dividerColor, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey.shade400, width: 1),
+          borderSide: BorderSide(color: theme.colorScheme.primary, width: 1),
         ),
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
       ),
@@ -111,20 +115,23 @@ class DashboardHome extends StatelessWidget {
       children: stats.map((stat) {
         return Expanded(
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 6), // Add horizontal spacing between cards
+            margin: const EdgeInsets.symmetric(horizontal: 6),
             child: Card(
               elevation: 1,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              color: Colors.white,
+              color: theme.cardColor,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Column(
                   children: [
-                    Icon(stat["icon"] as IconData, color: Colors.black),
+                    Icon(stat["icon"] as IconData, color: theme.colorScheme.primary),
                     const SizedBox(height: 8),
                     Text(
                       stat["value"]!.toString(),
-                      style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.bold, fontSize: 12),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -169,105 +176,94 @@ class DashboardHome extends StatelessWidget {
   }
 
   Widget _buildTopSellingProducts(BuildContext context, ThemeData theme) {
-  final products = [
-    {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
-    {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
-    {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
-    {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
-  ];
+    final products = [
+      {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
+      {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
+      {"image": "assets/images/shirt.jpg", "title": "Productname", "price": "€10.00"},
+      {"image": "assets/images/short.jpg", "title": "Productname", "price": "€10.00"},
+    ];
 
-  return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.25, // reduced overall card height
-    child: ListView.separated(
-      scrollDirection: Axis.horizontal,
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        final p = products[index];
-        return SizedBox(
-          width: MediaQuery.of(context).size.width * 0.42,
-          child: GestureDetector(
-            onTap: () => context.go('/product-details'),
-            child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Product Image
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                    child: Image.asset(
-                      p["image"]!,
-                      height: MediaQuery.of(context).size.height * 0.11,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-
-                  // Product Title
-                  Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: Text(
-                      p["title"]!,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.25,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final p = products[index];
+          return SizedBox(
+            width: MediaQuery.of(context).size.width * 0.42,
+            child: GestureDetector(
+              onTap: () => context.go('/product-details'),
+              child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                color: theme.cardColor,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+                      child: Image.asset(
+                        p["image"]!,
+                        height: MediaQuery.of(context).size.height * 0.11,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-
-                  // Product Subtitle
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Text(
-                      "Timeless style, durable cotton.",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(fontSize: 11),
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        p["title"]!,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-
-                  const Spacer(), // push rating + button to the bottom
-
-                  // Rating + Menu Button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "★★★★★",
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.amber,
-                            fontSize: 12,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      child: Text(
+                        "Timeless style, durable cotton.",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(fontSize: 11),
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "★★★★★",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.secondary,
+                              fontSize: 12,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.more_vert, size: 16),
-                          tooltip: 'More',
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                      ],
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.more_vert, size: 16),
+                            tooltip: 'More',
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-
-                  const SizedBox(height: 4), // small bottom spacing
-                ],
+                    const SizedBox(height: 4),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-      separatorBuilder: (context, _) => const SizedBox(width: 12),
-    ),
-  );
-}
-
-
+          );
+        },
+        separatorBuilder: (context, _) => const SizedBox(width: 12),
+      ),
+    );
+  }
 
   Widget _buildRecentActivities(ThemeData theme) {
     final activities = [
@@ -277,7 +273,7 @@ class DashboardHome extends StatelessWidget {
     ];
 
     return Card(
-      color: Colors.white,
+      color: theme.cardColor,
       child: Column(
         children: [
           ...activities.asMap().entries.map((entry) {
@@ -288,20 +284,23 @@ class DashboardHome extends StatelessWidget {
                 ListTile(
                   leading: Icon(activity["icon"] as IconData, color: theme.colorScheme.primary),
                   title: Text(
-                    activity["title"]!.toString(),
+                    activity["title"] as String,
                     style: theme.textTheme.bodyMedium?.copyWith(fontSize: 13),
                   ),
                   subtitle: Text(
-                    activity["time"]!.toString(),
+                    activity["time"] as String,
                     style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
                   ),
                   trailing: Text(
-                    activity["amount"]!.toString(),
-                    style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold, fontSize: 13),
+                    activity["amount"] as String,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
                 if (i < activities.length - 1)
-                  const Divider(height: 1, thickness: 1, color: Colors.grey),
+                  Divider(height: 1, thickness: 1, color: theme.dividerColor),
               ],
             );
           }),

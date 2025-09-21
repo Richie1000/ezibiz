@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/side_menu.dart';
+import '../theme/theme.dart'; 
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -42,20 +43,19 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       drawer: const SideMenu(),
       appBar: AppBar(
-        backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Chats',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
         ),
         centerTitle: true,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
+            icon: const Icon(Icons.menu, color: AppColors.textPrimary),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
@@ -64,26 +64,36 @@ class ChatScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          // 🔍 Search Box
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: AppColors.background.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const TextField(
+              child: TextField(
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  prefixIcon: Icon(Icons.search, color: AppColors.iconGrey),
                   hintText: 'Search',
+                  hintStyle: Theme.of(context)
+                      .inputDecorationTheme
+                      .hintStyle
+                      ?.copyWith(color: AppColors.textSecondary),
                   border: InputBorder.none,
                 ),
               ),
             ),
           ),
+          // 💬 Chats list
           Expanded(
             child: ListView.separated(
               itemCount: chats.length,
-              separatorBuilder: (_, __) => const Divider(indent: 72, endIndent: 16),
+              separatorBuilder: (_, __) => Divider(
+                indent: 72,
+                endIndent: 16,
+                color: AppColors.iconGrey.withOpacity(0.3),
+              ),
               itemBuilder: (context, index) {
                 final chat = chats[index];
                 return ListTile(
@@ -91,16 +101,26 @@ class ChatScreen extends StatelessWidget {
                     radius: 24,
                     backgroundImage: NetworkImage(chat['avatar']!),
                   ),
-                  title: Text(chat['name']!,
-                      style: const TextStyle(fontWeight: FontWeight.w600)),
+                  title: Text(
+                    chat['name']!,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                  ),
                   subtitle: Text(
                     chat['message']!,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.grey),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
                   ),
                   trailing: Text(
                     chat['time']!,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          fontSize: 12,
+                          color: AppColors.textSecondary,
+                        ),
                   ),
                   onTap: () {},
                 );

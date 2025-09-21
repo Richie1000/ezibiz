@@ -17,19 +17,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     {
       'title': 'Your Personalised\nSelling Experience',
       'subtitle':
-      'This app is designed to give you a smooth, fast, and personalised selling experience.',
+          'This app is designed to give you a smooth, fast, and personalised selling experience.',
       'animation': 'assets/animation/shopping_options.json',
     },
     {
       'title': 'Effortless Selling\n& Social Sharing',
       'subtitle':
-      'With intuitive tools,quick checkouts and seamless social media integration, you can easily showcase, sell and share your products with customers',
+          'With intuitive tools, quick checkouts and seamless social media integration, you can easily showcase, sell and share your products with customers.',
       'animation': 'assets/animation/online_delivery.json',
     },
     {
       'title': 'Store & Share\nWith Ease',
       'subtitle':
-      'Selling just got easier - share your top products directly to social media and reach more customers effortlessly!',
+          'Selling just got easier – share your top products directly to social media and reach more customers effortlessly!',
       'animation': 'assets/animation/shopping_delivery.json',
     },
   ];
@@ -37,12 +37,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onNext() {
     if (_currentPage < _onboardingData.length - 1) {
       _pageController.nextPage(
-          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
     }
   }
 
   void _onGetStarted() {
-    // Navigate to main app
     context.go('/register');
   }
 
@@ -55,8 +56,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -81,20 +82,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           textAlign: TextAlign.center,
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onBackground,
-                            fontSize: 25,
                           ),
                         ),
                         const SizedBox(height: 15),
                         Expanded(
-                          child: Lottie.asset(
-                            page['animation']!,
-                          ),
+                          child: Lottie.asset(page['animation']!),
                         ),
                         Text(
                           page['subtitle']!,
                           textAlign: TextAlign.justify,
-                          style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15, fontWeight: FontWeight.w500, color: theme.colorScheme.onBackground),
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                         const SizedBox(height: 20),
                       ],
@@ -103,44 +102,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 },
               ),
             ),
+
             // Page Indicators
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(_onboardingData.length, (index) {
-                return _buildDot(isActive: index == _currentPage, theme: theme);
-              }),
+              children: List.generate(
+                _onboardingData.length,
+                (index) => _buildDot(
+                  isActive: index == _currentPage,
+                  theme: theme,
+                ),
+              ),
             ),
             const SizedBox(height: 20),
-            // Next or Get Started button
+
+            // Next / Get Started button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: ElevatedButton(
-                onPressed: _currentPage == _onboardingData.length - 1
-                    ? _onGetStarted
-                    : _onNext,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _currentPage == _onboardingData.length - 1
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.primary.withOpacity(0.1),
-                  foregroundColor: _currentPage == _onboardingData.length - 1
-                      ? theme.colorScheme.onPrimary
-                      : theme.colorScheme.primary,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(
-                  _currentPage == _onboardingData.length - 1 ? 'Get Started' : 'Next',
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: _currentPage == _onboardingData.length - 1
-                        ? theme.colorScheme.onPrimary
-                        : theme.colorScheme.primary,
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _currentPage == _onboardingData.length - 1
+                      ? _onGetStarted
+                      : _onNext,
+                  child: Text(
+                    _currentPage == _onboardingData.length - 1
+                        ? 'Get Started'
+                        : 'Next',
                   ),
                 ),
               ),
             ),
-
             const SizedBox(height: 30),
           ],
         ),
@@ -154,7 +146,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       width: 10,
       height: 10,
       decoration: BoxDecoration(
-        color: isActive ? theme.colorScheme.primary : theme.colorScheme.primary.withOpacity(0.3),
+        color: isActive
+            ? theme.colorScheme.primary
+            : theme.colorScheme.primary.withOpacity(0.3),
         shape: BoxShape.circle,
       ),
     );

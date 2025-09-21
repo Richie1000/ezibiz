@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../theme/theme.dart'; // import your theme.dart
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -18,10 +18,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 4),
           child: Form(
             key: _formKey,
             child: Column(
@@ -31,46 +33,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Center(
                   child: Text(
                     "Create an account",
-                    style: GoogleFonts.roboto(
-                      fontSize: 24,
+                    style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Text(
                   "Hello There,",
-                  style: GoogleFonts.roboto(
-                    fontSize: 14,
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   "Create an account to manage your business.",
-                  style: GoogleFonts.roboto(fontSize: 14),
+                  style: theme.textTheme.bodyMedium,
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
+
                 _buildTextField(
+                  context,
                   label: "Full Name",
                   hint: "Kin UX",
                   icon: Icons.person_outline,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 _buildTextField(
+                  context,
                   label: "Email",
                   hint: "kinux@gmail.com",
                   icon: Icons.email_outlined,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
+
                 _buildPasswordField(
+                  context,
                   label: "Password",
                   obscure: _obscurePassword,
                   onToggle: () {
                     setState(() => _obscurePassword = !_obscurePassword);
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
+
                 _buildPasswordField(
+                  context,
                   label: "Confirm Password",
                   obscure: _obscureConfirmPassword,
                   onToggle: () {
@@ -79,7 +86,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     );
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
+
                 Row(
                   children: [
                     Checkbox(
@@ -89,36 +97,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           _acceptedTerms = value ?? false;
                         });
                       },
-                      activeColor: Colors.deepPurple,
+                      activeColor: theme.colorScheme.primary,
                     ),
-                    const Text("I understood the "),
+                    Text(
+                      "I understood the ",
+                      style: theme.textTheme.bodySmall,
+                    ),
                     Text(
                       "Terms & Policy.",
-                      style: TextStyle(color: Colors.deepPurple),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
+
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
                     onPressed: () {},
-                    child: const Text(
+                    child: Text(
                       "Create an account",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.onPrimary,
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
-                const Center(child: Text("or sign up with")),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
+
+                Center(
+                  child: Text(
+                    "or sign up with",
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+                const SizedBox(height: 10),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: const [
@@ -127,26 +144,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SocialIconButton(image: 'assets/icons/apple.png'),
                   ],
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
+
                 Center(
                   child: RichText(
                     text: TextSpan(
                       text: "Already have an account? ",
-                      style: const TextStyle(color: Colors.black),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onBackground,
+                      ),
                       children: [
                         TextSpan(
                           text: "Login",
-                          style: const TextStyle(
-                            color: Colors.orange,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.secondary,
                             fontWeight: FontWeight.bold,
                           ),
-                          recognizer:
-                              TapGestureRecognizer()
-                                ..onTap = () {
-                                  context.go(
-                                    '/login',
-                                  ); // Adjust path based on your route
-                                },
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              context.go('/login');
+                            },
                         ),
                       ],
                     ),
@@ -160,20 +177,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildTextField(
+    BuildContext context, {
     required String label,
     required String hint,
     required IconData icon,
   }) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label),
+        Text(label, style: theme.textTheme.bodyMedium),
         const SizedBox(height: 8),
         TextFormField(
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: Icon(icon),
+            prefixIcon: Icon(icon, color: theme.iconTheme.color),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -181,22 +201,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildPasswordField({
+  Widget _buildPasswordField(
+    BuildContext context, {
     required String label,
     required bool obscure,
     required VoidCallback onToggle,
   }) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label),
+        Text(label, style: theme.textTheme.bodyMedium),
         const SizedBox(height: 8),
         TextFormField(
           obscureText: obscure,
           decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.lock_outline),
+            prefixIcon: Icon(Icons.lock_outline, color: theme.iconTheme.color),
             suffixIcon: IconButton(
-              icon: Icon(obscure ? Icons.visibility_off : Icons.visibility),
+              icon: Icon(
+                obscure ? Icons.visibility_off : Icons.visibility,
+                color: theme.iconTheme.color,
+              ),
               onPressed: onToggle,
             ),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -214,10 +240,12 @@ class SocialIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: theme.dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Image.asset(image, width: 24, height: 24),

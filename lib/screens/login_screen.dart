@@ -6,6 +6,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -17,62 +19,65 @@ class LoginScreen extends StatelessWidget {
               Center(
                 child: Text(
                   "Login to your account",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 32),
-              const Text("Email"),
+
+              // Email field
+              Text("Email", style: theme.textTheme.bodyMedium),
               const SizedBox(height: 8),
               TextFormField(
                 decoration: InputDecoration(
                   hintText: "kinux@gmail.com",
                   prefixIcon: const Icon(Icons.email_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text("Password"),
+
+              // Password field
+              Text("Password", style: theme.textTheme.bodyMedium),
               const SizedBox(height: 8),
               TextFormField(
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "************",
-                  prefixIcon: const Icon(Icons.lock_outline),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                  prefixIcon: Icon(Icons.lock_outline),
                 ),
               ),
               const SizedBox(height: 24),
+
+              // Login button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                   onPressed: () {
                     context.go('/dashboard');
                   },
-                  child: const Text("Login", style: TextStyle(fontSize: 16, color: Colors.white),),
+                  child: const Text("Login"),
                 ),
               ),
               const SizedBox(height: 16),
+
+              // Forgot password
               Center(
                 child: GestureDetector(
                   onTap: () {
                     // TODO: Navigate to password reset
                   },
                   child: RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       text: "Forget password? ",
-                      style: TextStyle(color: Colors.black),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onBackground,
+                      ),
                       children: [
                         TextSpan(
                           text: "Reset",
-                          style: TextStyle(
-                            color: Colors.orange,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.secondary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -82,7 +87,9 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              const Center(child: Text("or sign in with")),
+
+              // Social sign in
+              Center(child: Text("or sign in with", style: theme.textTheme.bodyMedium)),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -93,21 +100,24 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 32),
+
+              // Register
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    
-                    context.go("/register"); 
+                    context.go("/register");
                   },
                   child: RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       text: "Don’t have an account? ",
-                      style: TextStyle(color: Colors.black),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onBackground,
+                      ),
                       children: [
                         TextSpan(
                           text: "Sign up",
-                          style: TextStyle(
-                            color: Colors.orange,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.secondary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -131,10 +141,12 @@ class SocialIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: theme.dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Image.asset(image, width: 24, height: 24),

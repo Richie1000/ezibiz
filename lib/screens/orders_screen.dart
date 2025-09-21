@@ -6,34 +6,30 @@ class OrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         drawer: const SideMenu(),
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          elevation: 0,
           centerTitle: true,
           leading: Builder(
             builder: (context) => IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
+              icon: Icon(Icons.menu, color: theme.colorScheme.onSurface),
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
-          title: const Text(
-            'Order',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            'Orders',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          bottom: const TabBar(
+          bottom: TabBar(
             isScrollable: true,
-            labelColor: Colors.deepPurple,
-            unselectedLabelColor: Colors.grey,
-            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-            indicatorColor: Colors.deepPurple,
-            tabs: [
+            tabs: const [
               Tab(text: 'All Orders'),
               Tab(text: 'Pending'),
               Tab(text: 'Delivered'),
@@ -119,146 +115,144 @@ class OrderCard extends StatelessWidget {
 
   const OrderCard({super.key, required this.order, this.maxWidth});
 
-  Color getStatusColor(String status) {
+  Color _statusBg(BuildContext context, String status) {
+    final theme = Theme.of(context);
     switch (status) {
       case 'Pending':
-        return Colors.orange.shade100;
+        return theme.colorScheme.tertiaryContainer;
       case 'Delivered':
-        return Colors.green.shade100;
+        return theme.colorScheme.secondaryContainer;
       case 'Cancelled':
-        return Colors.red.shade100;
+        return theme.colorScheme.errorContainer;
       default:
-        return Colors.grey.shade300;
+        return theme.colorScheme.surfaceVariant;
     }
   }
 
-  Color getStatusTextColor(String status) {
+  Color _statusText(BuildContext context, String status) {
+    final theme = Theme.of(context);
     switch (status) {
       case 'Pending':
-        return Colors.orange;
+        return theme.colorScheme.tertiary;
       case 'Delivered':
-        return Colors.green;
+        return theme.colorScheme.secondary;
       case 'Cancelled':
-        return Colors.red;
+        return theme.colorScheme.error;
       default:
-        return Colors.black;
+        return theme.colorScheme.onSurface;
     }
   }
 
-  Widget _tag(String text, {Color? color, Color? textColor}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    decoration: BoxDecoration(
-      color: color ?? Colors.grey.shade300,
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Text(
-      text,
-      style: TextStyle(fontSize: 10, color: textColor ?? Colors.black),
-    ),
-  );
-}
-
+  Widget _tag(BuildContext context, String text,
+      {Color? color, Color? textColor}) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color ?? theme.colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 10,
+          color: textColor ?? theme.colorScheme.onSurface,
+        ),
+      ),
+    );
+  }
 
   @override
-Widget build(BuildContext context) {
-  return Container(
-    width: maxWidth ?? double.infinity,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.shade100,
-          blurRadius: 6,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              order['image'],
-              width: 60,
-              height: 60,
-              fit: BoxFit.cover,
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                order['image'],
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    order['productName'],
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    order['orderId'],
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(Icons.access_time,
+                          size: 14, color: theme.colorScheme.onSurfaceVariant),
+                      const SizedBox(width: 4),
+                      Text(order['timeAgo'],
+                          style: theme.textTheme.bodySmall),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: [
+                      _tag(
+                        context,
+                        order['status'],
+                        color: _statusBg(context, order['status']),
+                        textColor: _statusText(context, order['status']),
+                      ),
+                      _tag(context, order['user']),
+                      _tag(
+                        context,
+                        order['location'],
+                        color: theme.colorScheme.primaryContainer,
+                        textColor: theme.colorScheme.primary,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  order['productName'],
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
+                  "₵${order['price']}",
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  order['orderId'],
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.access_time, size: 14, color: Colors.grey.shade600),
-                    const SizedBox(width: 4),
-                    Text(order['timeAgo'], style: const TextStyle(fontSize: 12)),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 4,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: getStatusColor(order['status']),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        order['status'],
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: getStatusTextColor(order['status']),
-                        ),
-                      ),
-                    ),
-                    _tag(order['user']),
-                    _tag(order['location'],
-                        color: Colors.purple.shade100, textColor: Colors.purple),
-                  ],
-                ),
+                const SizedBox(height: 8),
+                Icon(Icons.more_vert,
+                    size: 18, color: theme.colorScheme.onSurfaceVariant),
               ],
             ),
-          ),
-          const SizedBox(width: 8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "₵${order['price']}",
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Icon(Icons.more_vert, size: 18),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }

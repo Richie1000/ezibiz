@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-// import '../widgets/dashboard.dart';
-// import '../widgets/dashboard_bottom_navbar.dart';
+import '../theme/theme.dart'; // adjust import to where your theme/colors live
 
 class MyStoresScreen extends StatefulWidget {
   const MyStoresScreen({super.key});
@@ -10,33 +9,31 @@ class MyStoresScreen extends StatefulWidget {
 }
 
 class _MyStoresScreenState extends State<MyStoresScreen> {
-  // int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
-        title: const Text(
-          "My Stores",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: const Text("My Stores"),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8),
-          const Center(
+          Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
                 "Start by stocking your store with products your customers will love.",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black54, fontSize: 14),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -48,6 +45,7 @@ class _MyStoresScreenState extends State<MyStoresScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 _buildStoreCard(
+                  context,
                   image: "assets/images/apparel.jpg",
                   title: "King’s Klodeen",
                   type: "Type",
@@ -57,6 +55,7 @@ class _MyStoresScreenState extends State<MyStoresScreen> {
                 ),
                 const SizedBox(height: 12),
                 _buildStoreCard(
+                  context,
                   image: "assets/images/apparel.jpg",
                   title: "Sneakers God",
                   type: "Sneakers",
@@ -68,42 +67,36 @@ class _MyStoresScreenState extends State<MyStoresScreen> {
             ),
           ),
 
-          // Add Store button
+          // Add Store button (uses theme button style)
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: Colors.purple,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
                 onPressed: () {},
-                child: const Text(
-                  "+ Add Store",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                child: const Text("+ Add Store"),
               ),
             ),
           ),
         ],
       ),
-      // bottomNavigationBar removed
     );
   }
 
-  Widget _buildStoreCard({
+  Widget _buildStoreCard(
+    BuildContext context, {
     required String image,
     required String title,
     required String type,
     required String description,
     required String productInfo,
   }) {
+    final theme = Theme.of(context);
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 2,
+      // cardTheme handles color automatically for light/dark
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(
@@ -128,8 +121,9 @@ class _MyStoresScreenState extends State<MyStoresScreen> {
                       Expanded(
                         child: Text(
                           title,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       IconButton(
@@ -138,21 +132,27 @@ class _MyStoresScreenState extends State<MyStoresScreen> {
                       )
                     ],
                   ),
-                  Text(type,
-                      style: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.w500)),
+                  Text(
+                    type,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     description,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12, color: Colors.black87),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     productInfo,
-                    style: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w600),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

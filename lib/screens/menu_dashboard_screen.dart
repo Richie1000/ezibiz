@@ -5,18 +5,22 @@ class MenuDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Icon(Icons.arrow_back, color: theme.colorScheme.onBackground),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           "Dashboard",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: theme.textTheme.titleLarge?.copyWith(
+            color: theme.colorScheme.onBackground,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
       ),
@@ -29,34 +33,38 @@ class MenuDashboardScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.deepPurple,
+                color: theme.colorScheme.primary,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Revenue",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                        ),
                       ),
-                      Icon(Icons.remove_red_eye, color: Colors.white),
+                      Icon(Icons.remove_red_eye, color: theme.colorScheme.onPrimary),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     "₵2,586",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold),
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     "+12% from last month",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onPrimary.withOpacity(0.7),
+                    ),
                   ),
                 ],
               ),
@@ -70,7 +78,7 @@ class MenuDashboardScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
-              children: [
+              children: const [
                 _StatCard(title: "Conversion Rate", value: "94%"),
                 _StatCard(title: "Total Orders", value: "49 Total Orders"),
                 _StatCard(title: "AVG. Order Value", value: "₵48"),
@@ -80,9 +88,11 @@ class MenuDashboardScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Sales Chart
-            const Text(
+            Text(
               "Sales",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 12),
             SimpleBarChart(
@@ -92,7 +102,6 @@ class MenuDashboardScreen extends StatelessWidget {
           ],
         ),
       ),
-      // bottomNavigationBar removed
     );
   }
 }
@@ -105,26 +114,32 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(title, style: const TextStyle(color: Colors.black54, fontSize: 14)),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ],
+    final theme = Theme.of(context);
+
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              value,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -135,24 +150,28 @@ class _TopProductsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
-        ],
-      ),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Top Selling Products", style: TextStyle(fontSize: 14, color: Colors.black54)),
-          SizedBox(height: 8),
-          Text("1. Tshirt"),
-          Text("2. Green Kaftan"),
-          Text("3. Round Neck"),
-        ],
+    final theme = Theme.of(context);
+
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Top Selling Products",
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text("1. Tshirt", style: theme.textTheme.bodyMedium),
+            Text("2. Green Kaftan", style: theme.textTheme.bodyMedium),
+            Text("3. Round Neck", style: theme.textTheme.bodyMedium),
+          ],
+        ),
       ),
     );
   }
@@ -167,6 +186,7 @@ class SimpleBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final maxValue = values.reduce((a, b) => a > b ? a : b);
 
     return SizedBox(
@@ -175,7 +195,7 @@ class SimpleBarChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(values.length, (i) {
-          final height = (values[i] / maxValue) * 150; // bar scaling
+          final height = (values[i] / maxValue) * 150; // scaling
           return Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -183,12 +203,15 @@ class SimpleBarChart extends StatelessWidget {
                 height: height,
                 width: 12,
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple,
+                  color: theme.colorScheme.primary,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
               const SizedBox(height: 4),
-              Text(labels[i], style: const TextStyle(fontSize: 10)),
+              Text(
+                labels[i],
+                style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
+              ),
             ],
           );
         }),

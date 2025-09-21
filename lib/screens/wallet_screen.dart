@@ -1,42 +1,25 @@
 import 'package:flutter/material.dart';
 import '../widgets/side_menu.dart';
+import '../theme/theme.dart'; // <-- your AppColors and theme setup
 
 class WalletScreen extends StatelessWidget {
   const WalletScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       drawer: const SideMenu(),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: const Text(
-          'Wallet',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
-      ),
-      backgroundColor: const Color(0xFFF6F6F6),
+      backgroundColor: AppColors.background,
       body: Column(
         children: [
+          // Gradient header
           Container(
             padding: const EdgeInsets.fromLTRB(16, 60, 16, 24),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF6A1B9A), Color(0xFF8E24AA)],
+                colors: [AppColors.primary300, AppColors.primary300],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -45,15 +28,20 @@ class WalletScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Header Row
                 Row(
                   children: [
-                    const Icon(Icons.menu, color: Colors.white),
+                    Builder(
+                      builder: (context) => IconButton(
+                        icon: const Icon(Icons.menu, color: Colors.white),
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                      ),
+                    ),
                     const Spacer(),
-                    const Text(
+                    Text(
                       'Wallet',
-                      style: TextStyle(
+                      style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
-                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -62,7 +50,7 @@ class WalletScreen extends StatelessWidget {
                       onPressed: () {},
                       child: const Text(
                         'Payment Method',
-                        style: TextStyle(color: Colors.orangeAccent),
+                        style: TextStyle(color: Colors.orange),
                       ),
                     ),
                   ],
@@ -96,23 +84,25 @@ class WalletScreen extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(height: 16),
+
+          // Action buttons
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
+                      backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Text('Withdraw', style: TextStyle(color: Colors.white),),
+                    child: const Text('Withdraw'),
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -120,7 +110,7 @@ class WalletScreen extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () {},
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.deepPurple),
+                      side: const BorderSide(color: AppColors.primary),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -132,7 +122,10 @@ class WalletScreen extends StatelessWidget {
               ],
             ),
           ),
+
           const SizedBox(height: 24),
+
+          // Transaction card
           Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -140,6 +133,13 @@ class WalletScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
@@ -152,7 +152,10 @@ class WalletScreen extends StatelessWidget {
                       const Spacer(),
                       TextButton(
                         onPressed: () {},
-                        child: const Text('View all'),
+                        child: Text(
+                          'View all',
+                          style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                        ),
                       ),
                     ],
                   ),
@@ -161,9 +164,9 @@ class WalletScreen extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          _TransactionItem(name: 'Adepa', amount: '+ ₵302'),
+                          _TransactionItem(name: 'Adepa', amount: '+ ₵302', amountColor: AppColors.primary),
                           _TransactionItem(name: 'Withdrawal', amount: '- ₵30', amountColor: Colors.orange),
-                          _TransactionItem(name: 'Emmanuella', amount: '+ ₵902'),
+                          _TransactionItem(name: 'Emmanuella', amount: '+ ₵902', amountColor: AppColors.primary),
                           _TransactionItem(
                             name: 'Transfer',
                             amount: '+ ₵302',
@@ -171,9 +174,9 @@ class WalletScreen extends StatelessWidget {
                             note: '(Cancelled)',
                             noteColor: Colors.red,
                           ),
-                          _TransactionItem(name: 'Luke', amount: '+ ₵302'),
-                          _TransactionItem(name: 'John', amount: '+ ₵302'),
-                          _TransactionItem(name: 'Mark', amount: '+ ₵302'),
+                          _TransactionItem(name: 'Luke', amount: '+ ₵302', amountColor: AppColors.primary),
+                          _TransactionItem(name: 'John', amount: '+ ₵302', amountColor: AppColors.primary),
+                          _TransactionItem(name: 'Mark', amount: '+ ₵302', amountColor: AppColors.primary),
                         ],
                       ),
                     ),
@@ -198,7 +201,7 @@ class _TransactionItem extends StatelessWidget {
   const _TransactionItem({
     required this.name,
     required this.amount,
-    this.amountColor = Colors.black,
+    required this.amountColor,
     this.note,
     this.noteColor,
   });
