@@ -52,10 +52,10 @@ class DashboardHome extends StatelessWidget {
       children: [
         Expanded(
           child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: theme.dividerColor),
-              borderRadius: BorderRadius.circular(10),
-            ),
+            // decoration: BoxDecoration(
+            //   border: Border.all(color: theme.dividerColor),
+            //   borderRadius: BorderRadius.circular(10),
+            // ),
             child: Text(
               "https://www.ezibiz.com/storename",
               style: theme.textTheme.bodySmall?.copyWith(fontSize: 10),
